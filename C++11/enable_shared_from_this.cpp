@@ -15,7 +15,7 @@ class Foo : public std::enable_shared_from_this<Foo> {
 public:
     
     static std::shared_ptr<Foo> create() {
-        std::cout << "Foo::Create() static creation function" << std::endl;
+        std::cout << "Foo::create() static creation function" << std::endl;
         return std::shared_ptr<Foo>(new Foo());
     }
 
