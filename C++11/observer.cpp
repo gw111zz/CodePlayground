@@ -36,11 +36,11 @@ public:
         mObservers.clear();
     }
 
-    void addObserver(std::shared_ptr<Observer> observer) {
+    void addObserver(std::weak_ptr<Observer> observer) {
         mObservers.insert(observer);
     }
 
-    void removeObserver(std::shared_ptr<Observer> observer) {
+    void removeObserver(std::weak_ptr<Observer> observer) {
         mObservers.erase(observer);
     }
 
@@ -57,7 +57,6 @@ public:
     }
 
 private:
-    // std::weak_ptr does not have a < operator so need to use the std::owner_less comparator
     std::set<std::weak_ptr<Observer>, std::owner_less<std::weak_ptr<Observer> > > mObservers;
 };
 
@@ -66,23 +65,25 @@ int main() {
     std::unique_ptr<Observed> observedPtr(new Observed);
 
     std::shared_ptr<Observer> observer1Ptr(std::make_shared<MyObserver>());
-    observedPtr->addObserver(observer1Ptr);
+    std::weak_ptr<Observer> observer1WeakPtr(observer1Ptr);
+    observedPtr->addObserver(observer1WeakPtr);
 
     std::cout << "One observer added" << std::endl;
     std::cout << "Trigger event..." << std::endl;
     observedPtr->triggerEvent();
 
     std::shared_ptr<Observer> observer2Ptr(std::make_shared<MyObserver>());
-    observedPtr->addObserver(observer2Ptr);
+    std::weak_ptr<Observer> observer2WeakPtr(observer2Ptr);
+    observedPtr->addObserver(observer2WeakPtr);
 
     std::cout << "Another observer added" << std::endl;
     std::cout << "Trigger event..." << std::endl;
     observedPtr->triggerEvent();
 
-    observedPtr->removeObserver(observer1Ptr);
-    observedPtr->removeObserver(observer2Ptr);
+    observedPtr->removeObserver(observer1WeakPtr);
+    observedPtr->removeObserver(observer2WeakPtr);
 
-    std::cout << "No observers added" << std::endl;
+    std::cout << "Remove all observers" << std::endl;
     std::cout << "Trigger event..." << std::endl;
     observedPtr->triggerEvent();
 
