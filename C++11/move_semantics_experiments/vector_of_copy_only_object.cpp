@@ -17,7 +17,6 @@ public:
         mName = rhs.mName;
         mAge = rhs.mAge;
     }
-    //Person(Person&& rhs) = delete;
 
 private:
 
