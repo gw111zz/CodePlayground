@@ -19,6 +19,10 @@ int main() {
     q.push_back(Obj(2));
     q.push_back(Obj(3));
 
+    for (const auto& item : q) {
+        std::cout << item.mData << std::endl;
+    }
+
     bool found = std::find(q.begin(), q.end(), Obj(2)) != q.end();
     if (found) {
         std::cout << "Found" << std::endl;
